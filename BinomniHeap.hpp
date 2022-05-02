@@ -15,12 +15,47 @@ class BinomniHeap{
 
     void insert(Node* node);
     Node* min();
-    Node* extractmin();
+    Node* extractMin();
     Node* unija(Node* n1, Node* n2);
-    void smanjikljuc(int kljuc, int vrednost);
+    void smanjiKljuc(int kljuc, int vrednost);
     Node* pretrazi(int kljuc, Node *node);
     Node* stabilizujStablo(Node* node);
 };
+
+Node* BinomniHeap::min(){
+    Node *node = head;
+    int min = 10001;
+    Node* minNode =  nullptr;
+    while(node != nullptr){
+        if(node->kljuc < min)
+            minNode = node;
+        node = node->sledeci;
+    }
+    return minNode;
+}
+Node* BinomniHeap::extractMin(){
+    Node *node = head, *pre = nullptr;
+    int min = 10001;
+    Node* minNode =  nullptr, *minPre = nullptr;
+    while(node != nullptr){
+        if(node->kljuc < min){
+            minNode = node;
+            minPre = pre;
+        }
+        pre = node;
+        node = node->sledeci;
+    }
+    minPre->sledeci = minNode->sledeci;
+    minNode->sledeci = nullptr;
+    Node* noviHeap = minNode->dete;
+    minNode->dete = nullptr;
+
+    noviHeap->postaviStepen(0);
+
+    head = unija(head, noviHeap);
+
+    return minNode;
+}
 
 void BinomniHeap::insert(Node* node){
     if(head == nullptr){
@@ -32,7 +67,7 @@ void BinomniHeap::insert(Node* node){
     }
 }
 
-void BinomniHeap::smanjikljuc(int kljuc, int vrednost){
+void BinomniHeap::smanjiKljuc(int kljuc, int vrednost){
     Node* node = pretrazi(kljuc, head);
     node->kljuc -=  vrednost;
 
@@ -57,7 +92,7 @@ Node* BinomniHeap::unija(Node* n1, Node* n2){
         }
     }
 
-    stabilizujStablo(pocetak);
+    pocetak = stabilizujStablo(pocetak);
 
     return pocetak;
 }
@@ -99,29 +134,3 @@ Node* BinomniHeap::stabilizujStablo(Node* node){ //QUESTIONABLEEEE???!?!?!?
 
     return pocetak;
 }
-
-/*
-Node* BinomniHeap::stabilizujStablo(Node* node){
-    Node* pocetak = node;
-    if(node->stepen == node->sledeci->stepen){
-        Node*p, *d;
-        if(node->kljuc < node->sledeci->kljuc){
-            pocetak = node;
-            p = node;
-            d = node->sledeci;
-            p->sledeci = d->sledeci;
-        }else{
-            pocetak = node->sledeci;
-            p = node->sledeci;
-            d = node;
-        }
-        d->sledeci = p->dete;
-        p->dete = d->sledeci;
-    }
-
-
-    return pocetak;
-}
-
-
-*/
