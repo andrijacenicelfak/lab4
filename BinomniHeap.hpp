@@ -62,9 +62,41 @@ Node* BinomniHeap::unija(Node* n1, Node* n2){
     return pocetak;
 }
 
-Node* BinomniHeap::stabilizujStablo(Node* node){
-    Node* pocetak = node;
-    Node* pre = node;
+Node* BinomniHeap::stabilizujStablo(Node* node){ //QUESTIONABLEEEE???!?!?!?
+    Node* pocetak = nullptr;
+    Node* tr = node;
+    Node* prev = nullptr;
+    Node* sl = tr->sledeci;
+    if(sl == nullptr)
+        return node;
+    while(tr != nullptr){
+        if(sl != nullptr && tr->stepen == sl->stepen){
+            if(sl->sledeci != nullptr && sl->stepen == sl->sledeci->stepen){
+                prev = tr;
+                tr = sl;
+                sl = sl->sledeci;
+            }
+            if(tr->kljuc < sl->kljuc){
+                tr->sledeci = sl->sledeci;
+                sl->sledeci = tr->dete;
+                tr->dete = sl;
+                tr->stepen++;
+                sl = tr->sledeci;
+            }else{
+                prev->sledeci = sl;
+                tr->sledeci = sl->dete;
+                sl->dete = tr;
+                sl->stepen++;
+
+                tr = sl;
+                sl = tr->sledeci;
+            }
+        }else{
+            tr = sl;
+            sl = tr->sledeci;
+        }
+    }
+
     return pocetak;
 }
 
