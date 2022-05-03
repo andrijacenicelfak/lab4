@@ -1,0 +1,48 @@
+Binomni heap sa : 10 elemenata
+Vreme za extractmin :0ms
+Vreme za decrement key :0ms
+Vreme za delete node : 0ms
+Vreme za add : 0ms
+-----------------------------------------
+Binomni heap sa : 100 elemenata
+Vreme za extractmin :0ms
+Vreme za decrement key :0ms
+Vreme za delete node : 0ms
+Vreme za add : 0ms
+-----------------------------------------
+Binomni heap sa : 1000 elemenata
+Vreme za extractmin :0ms
+Vreme za decrement key :0ms
+Vreme za delete node : 0ms
+Vreme za add : 0ms
+-----------------------------------------
+Binomni heap sa : 10000 elemenata
+Vreme za extractmin :0ms
+Vreme za decrement key :40ms
+Vreme za delete node : 40ms
+Vreme za add : 0ms
+-----------------------------------------
+Binomni heap sa : 100000 elemenata
+Vreme za extractmin :15ms
+Vreme za decrement key :3541ms
+Vreme za delete node : 2618ms
+Vreme za add : 8ms
+-----------------------------------------
+Binomni heap sa : 100000 elemenata
+Vreme za extractmin :16ms
+Vreme za decrement key :2337ms
+Vreme za delete node : 2274ms
+Vreme za add : 0ms
+-----------------------------------------
+Binomni heap sa : 100000 elemenata
+Vreme za extractmin :16ms
+Vreme za decrement key :2356ms
+Vreme za delete node : 2214ms
+Vreme za add : 16ms
+-----------------------------------------
+Binomni heap sa : 100000 elemenata
+Vreme za extractmin :16ms
+Vreme za decrement key :2309ms
+Vreme za delete node : 2215ms
+Vreme za add : 8ms
+-----------------------------------------

@@ -7,6 +7,7 @@
 #include <chrono>
 #include <ctime>
 #include <iostream>
+#include <fstream>
 #include <random>
 #include <sstream>
 
@@ -21,29 +22,61 @@ using std::chrono::system_clock;
 using namespace std;
 
 int main(int argc, char* argv[]){
-    /*if (argc < 1)
+    if (argc < 2)
         return -1;
     
-    //stringstream s(argv[1]);
+    stringstream s(argv[1]);
     int N = 0;
-    s >> N;*/
-    int N = 100;
+    s >> N;
+    int *vrednosti = new int[N];
 
     BinomniHeap* heap = new BinomniHeap();
 
-    auto pocetak = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     for(int i = 0; i < N; i++){
         int r = rand() % 10001;
+        vrednosti[i] = r;
         heap->insert(new Node(r, 0));
     }
-    int i = 0;
+    ofstream f(argv[2], ios::app);
+
+    int n = N/10;
+
+    auto pocetak = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     Node* node;
-    while(node = heap->extractMin()){
-        cout << i++ <<" : " << node->kljuc << endl;
+    for(int i = 0; i < n; i++){
+        node = heap->extractMin();
         delete node;
     }
-    auto dodavanje = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    auto extractmin = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    int index= 0;
+    for(int i = 0; i < n;i++){
+        index= rand()%N;
+        heap->smanjiKljuc(vrednosti[index], vrednosti[index] - 1);
+    }
+    auto deckey = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    int i = 0;
+    while(i < n){
+        index= rand()%N;
+        if(vrednosti[index] != -1){
+            heap->brisiNode(vrednosti[index]);
+            vrednosti[index] = -1;
+            i++;
+        }
+    }
+    auto delnode = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    for(i =0; i < n; i++){
+        heap->insert(new Node(rand() % 10001, 0));
+    }
+    auto add = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 
-    //delete heap;
+    f   << "Binomni heap sa : " << N << " elemenata\n"
+        << "Vreme za extractmin :" << extractmin - pocetak << "ms\n"
+        << "Vreme za decrement key :" << deckey - extractmin << "ms\n"
+        << "Vreme za delete node : " << delnode - deckey << "ms\n"
+        << "Vreme za add : " << add - delnode << "ms\n"
+        << "-----------------------------------------\n";
+    f.close();
+    delete heap;
+    delete[] vrednosti;
     return 1;
 }
