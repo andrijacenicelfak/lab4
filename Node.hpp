@@ -1,4 +1,4 @@
-
+#pragma once
 class Node{
     public:
     Node *roditelj, *dete, *sledeci;
@@ -6,9 +6,16 @@ class Node{
     Node(int kljuc, int stepen){
         this->kljuc = kljuc;
         this->stepen = stepen;
+        roditelj = dete = sledeci = nullptr;
     }
 
     void postaviStepen(int stepen);
+    ~Node(){/**/
+        if(dete != nullptr)
+            delete dete;
+        if(sledeci != nullptr)
+            delete sledeci;/**/
+    }
 };
 
 void Node::postaviStepen(int stepen){
