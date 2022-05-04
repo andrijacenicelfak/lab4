@@ -18,6 +18,7 @@ class FibHeap{
     }
     void insert(Node* node);
     void link(Node* n1, Node* n2);
+    void link2(Node* n1, Node* n2);
     Node* consolidateTree(Node* node);
     Node* findMin(Node * node);
     Node* unija(Node* n1, Node* n2); // ne menja roditelje ni jednog ni drugog
@@ -47,7 +48,34 @@ void FibHeap::link(Node* n1, Node *n2){
     if(n1 == nullptr || n2 == nullptr) return;
     
     n2->levo->desno = n2->desno;
-    n2->desno = n2->levo;
+    n2->desno->levo = n2->levo;
+    n2->roditelj = n1;
+    if (n1->dete == nullptr) {
+        n2->levo = n2;
+        n2->desno = n2;
+        n1->dete = n2;
+    }
+    else {
+        n2->levo = n1->dete->levo;
+        n2->desno = n1->dete;
+        n2->levo->desno = n2;
+        n2->desno->levo = n2;
+        n1->dete = n2;
+    }
+    n1->stepen++; //Broj potomaka => direktnih ili ukupno? Ostavljam ovako gde je to broj direktnih potomaka
+}
+void FibHeap::link2(Node* n1, Node* n2) {
+    if (n1 == nullptr || n2 == nullptr) return;
+
+    n1->levo->desno = n1->desno;
+    n1->desno->levo = n1->levo;
+
+    n1->desno = n2->desno;
+    n1->levo = n2->levo;
+
+    n1->desno->levo = n1;
+    n1->levo->desno = n1;
+
     n2->roditelj = n1;
     if (n1->dete == nullptr) {
         n2->levo = n2;
@@ -65,6 +93,7 @@ void FibHeap::link(Node* n1, Node *n2){
 }
 Node* FibHeap::consolidateTree(Node* node){
     int vel = (int)log2(size) + 1;
+    vel *= 2;
     Node**  stepen = new Node*[vel];
 
     for (int i = 0; i < vel; i++)
@@ -72,14 +101,15 @@ Node* FibHeap::consolidateTree(Node* node){
 
     bool done = false;
     while(!done){
-        if(stepen[node->stepen] == nullptr){ 
-            stepen[node->stepen] = node;
+        int st = node->stepen;
+        if(stepen[st] == nullptr){ 
+            stepen[st] = node;
             node = node->desno;
         }
         else if(stepen[node->stepen] != node){
-            int st = node->stepen;
-            if(stepen[node->stepen]->kljuc < node->kljuc){
-                link(stepen[node->stepen], node);
+            if(stepen[st]->kljuc < node->kljuc){
+                link2(stepen[st], node);
+                node = stepen[st];
             }
             else{
                 link(node, stepen[node->stepen]);
@@ -129,24 +159,25 @@ Node* FibHeap::extractMin(){
     min->desno->levo = min->levo;
     if(nmin == min)
         min = nullptr;
-    if(min->dete != nullptr){
-        Node* dete = min->dete;
+    if(node->dete != nullptr){
+        Node* dete = node->dete;
         setParent(dete, nullptr);
         unija(nmin, dete);
     }
-    findMin(nmin);
-    consolidateTree(min);
-    min->roditelj = nullptr;
-    min->dete = nullptr;
-    min->levo = nullptr;
-    min->desno = nullptr;
+    node->roditelj = nullptr;
+    node->dete = nullptr;
+    node->levo = nullptr;
+    node->desno = nullptr;
+    size--;
+    min = nmin;
+    consolidateTree(nmin);
     return node;
 }
 Node* FibHeap::pretrazi(int kljuc, Node *node){
     Node* ret = nullptr;
     if(node == nullptr && min->kljuc != kljuc)
         node = min->desno;
-    else
+    else if(min->kljuc == kljuc)
         return min;
 
     while(ret != nullptr && node != min){
@@ -158,6 +189,7 @@ Node* FibHeap::pretrazi(int kljuc, Node *node){
 }
 void FibHeap::smanjiKljuc(int kljuc, int vrednost){
     Node *node = pretrazi(kljuc, nullptr);
+    if (node == nullptr) return; // NIJE NASLO ELEMENT
     node->kljuc -= vrednost;
     while(node->roditelj != nullptr && node->roditelj->kljuc > node->kljuc){
         kljuc = node->roditelj->kljuc;
@@ -168,11 +200,17 @@ void FibHeap::smanjiKljuc(int kljuc, int vrednost){
     
 }
 void FibHeap::brisiNode(int kljuc){
+    size--;
     Node* node = pretrazi(kljuc, nullptr);
+    if (node == nullptr) return; // NIJE NASLO CVOR!
     Node* dete = node->dete;
     setParent(dete, nullptr);
     unija(dete, min);
     node->levo->desno = node->desno;
     node->desno->levo = node->levo;
+    if (node == min) findMin(node->desno);
+    node->levo = nullptr;
+    node->desno = nullptr;
+    node->dete = nullptr;
     delete node;
 }

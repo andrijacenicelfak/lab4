@@ -22,16 +22,12 @@ using std::chrono::system_clock;
 using namespace std;
 
 int main(int argc, char* argv[]){
-    /*
     if (argc < 2)
         return -1;
     
     stringstream s(argv[1]);
     int N = 0;
     s >> N;
-    */
-
-    int N = 10;
 
     int *vrednosti = new int[N];
 
@@ -42,7 +38,7 @@ int main(int argc, char* argv[]){
         vrednosti[i] = r;
         heap->insert(new Node(r, 0));
     }
-    ofstream f("rez.txt", ios::app);
+    ofstream f(argv[2], ios::app);
 
     int n = N/10;
 
@@ -50,6 +46,7 @@ int main(int argc, char* argv[]){
     Node* node;
     for(int i = 0; i < n; i++){
         node = heap->extractMin();
+        //cout << node->kljuc << endl;
         delete node;
     }
     auto extractmin = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
@@ -73,7 +70,7 @@ int main(int argc, char* argv[]){
         heap->insert(new Node(rand() % 10001, 0));
     }
     auto add = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-
+	cout << "DONE!\n";
     f   << "Fibonaci heap sa : " << N << " elemenata\n"
         << "Vreme za extractmin :" << extractmin - pocetak << "ms\n"
         << "Vreme za decrement key :" << deckey - extractmin << "ms\n"
@@ -81,7 +78,7 @@ int main(int argc, char* argv[]){
         << "Vreme za add : " << add - delnode << "ms\n"
         << "-----------------------------------------\n";
     f.close();
-    delete heap;
+    //delete heap;
     delete[] vrednosti;
     return 1;
 }

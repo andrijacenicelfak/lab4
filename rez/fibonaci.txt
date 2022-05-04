@@ -1,0 +1,36 @@
+Fibonaci heap sa : 100 elemenata
+Vreme za extractmin :0ms
+Vreme za decrement key :0ms
+Vreme za delete node : 0ms
+Vreme za add : 0ms
+-----------------------------------------
+Fibonaci heap sa : 1000 elemenata
+Vreme za extractmin :0ms
+Vreme za decrement key :0ms
+Vreme za delete node : 0ms
+Vreme za add : 0ms
+-----------------------------------------
+Fibonaci heap sa : 10000 elemenata
+Vreme za extractmin :2ms
+Vreme za decrement key :0ms
+Vreme za delete node : 0ms
+Vreme za add : 1ms
+-----------------------------------------
+Fibonaci heap sa : 100000 elemenata
+Vreme za extractmin :29ms
+Vreme za decrement key :1ms
+Vreme za delete node : 1ms
+Vreme za add : 4ms
+-----------------------------------------
+Fibonaci heap sa : 100000 elemenata
+Vreme za extractmin :31ms
+Vreme za decrement key :1ms
+Vreme za delete node : 0ms
+Vreme za add : 3ms
+-----------------------------------------
+Fibonaci heap sa : 100000 elemenata
+Vreme za extractmin :37ms
+Vreme za decrement key :0ms
+Vreme za delete node : 1ms
+Vreme za add : 2ms
+-----------------------------------------
