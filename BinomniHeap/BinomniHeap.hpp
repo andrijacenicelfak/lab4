@@ -13,7 +13,8 @@ class BinomniHeap{
         size = 0;
     }
     ~BinomniHeap(){
-        delete head;
+        if(head != nullptr)
+            delete head;
     }
     void insert(Node* node);
     Node* min();
@@ -21,7 +22,7 @@ class BinomniHeap{
     Node* unija(Node* n1, Node* n2);
     void smanjiKljuc(int kljuc, int vrednost);
     Node* pretrazi(int kljuc, Node *node);
-    Node* stabilizujStablo(Node* node);
+    Node* consolidateTree(Node* node);
     void link(Node* y, Node* z);
     void brisiNode(int kljuc);
 };
@@ -113,7 +114,7 @@ void BinomniHeap::insert(Node* node){
     }else{
         node->sledeci = head;
         head = node;
-        head = stabilizujStablo(head);
+        head = consolidateTree(head);
     }
     size++;
 }
@@ -156,11 +157,11 @@ Node* BinomniHeap::unija(Node* n1, Node* n2){
 
     }
 
-    pocetak = stabilizujStablo(pocetak);
+    pocetak = consolidateTree(pocetak);
 
     return pocetak;
 }
-Node* BinomniHeap::stabilizujStablo(Node* node){
+Node* BinomniHeap::consolidateTree(Node* node){
     Node* prev_x;
     Node* next_x;
     Node* x;
